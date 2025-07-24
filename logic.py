@@ -68,6 +68,7 @@ class MyPokemon:
         embed.add_field(name="HP", value=str(self.hp), inline=True)
         embed.add_field(name="Power", value=str(self.power), inline=True)
         embed.add_field(name="Ability", value=self.ability or "Unknown", inline=True)
+
         img_url = await self.show_img()
         if img_url:
             embed.set_image(url=img_url)
@@ -90,8 +91,11 @@ class MyPokemon:
 
 
 class Wizard(MyPokemon):
-    pass
-
+    async def extrahealth(self):
+        extra_health = random.randint(5,15)
+        if self.hp <= 20:
+            self.hp += extra_health
+        return f"Sihirbaz pokemon kendine {extra_health} can bastı!"
 
 class Fighter(MyPokemon):
     async def attack(self, enemy):
