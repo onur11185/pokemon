@@ -23,7 +23,7 @@ async def go(ctx):
         pokemon.name = await pokemon.get_name()
         pokemon.ability = await pokemon.get_ability()
 
-        await ctx.send(f"Pokémonunuzun ismi: {pokemon.name}\nYeteneği: {pokemon.ability}")
+        await ctx.send(f"Pokémonunuzun ismi: {pokemon.name}\nYeteneği: {pokemon.ability}\nHP: {pokemon.hp}\nPower: {pokemon.power}")
 
         image_url = await pokemon.show_img()
         if image_url:
@@ -58,6 +58,20 @@ async def reset(ctx):
         await ctx.send("Zaten bir Pokémonunuz yok.")
 
 
-
+@bot.command()
+async def attack(ctx):
+    target = ctx.message.mentions[0] if ctx.message.mentions else None  # Mesajda belirtilen kullanıcıyı alırız
+    if target:  # Kullanıcının belirtilip belirtilmediğini kontrol ederiz
+        # Hem saldırganın hem de hedefin Pokémon sahibi olup olmadığını kontrol ederiz
+        if target.name in Pokemon.pokemons and ctx.author.name in Pokemon.pokemons:
+            enemy = Pokemon.pokemons[target.name]  # Hedefin Pokémon'unu alırız
+            attacker = Pokemon.pokemons[ctx.author.name]  # Saldırganın Pokémon'unu alırız
+            result = await attacker.attack(enemy)  # Saldırıyı gerçekleştirir ve sonucu alırız
+            await ctx.send(result)  # Saldırı sonucunu göndeririz
+        else:
+            await ctx.send("Savaş için her iki tarafın da Pokémon sahibi olması gerekir!")  # Katılımcılardan birinin Pokémon'u yoksa bilgilendiririz
+    else:
+        await ctx.send("Saldırmak istediğiniz kullanıcıyı etiketleyerek belirtin.")  # Saldırmak için kullanıcıyı etiketleyerek belirtmesini isteriz
+        
 bot.run(token)
 

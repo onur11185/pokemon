@@ -1,1 +1,1 @@
-token = "tokeni buraya koy"
+token = "MTM4NTY4NTUyNTIwMTAzMTI2MA.GiNO7r.FPWJgQqOaP9yMVttVjpOdIt0KkxuK9im0L9Kyo"
