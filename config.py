@@ -1,1 +1,1 @@
-token = "tokeni buraya giriniz"
+token = "tokeni buraya girin"

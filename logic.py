@@ -1,6 +1,7 @@
 import aiohttp  
 import random
 import discord
+from datetime import datetime, timedelta
 
 class MyPokemon:
     pokemons = {}
@@ -14,6 +15,7 @@ class MyPokemon:
         self.power = random.randint(10, 30)
         self.level = 1
         self.ability = None
+        self.last_feed_time = datetime.now()
         MyPokemon.total += 1
 
         if pokemon_trainer not in MyPokemon.pokemons:
@@ -90,12 +92,31 @@ class MyPokemon:
                 return f"Pokemon eğitmeni @{self.pokemon_trainer} @{enemy.pokemon_trainer}'nı yendi"
 
 
+
+    async def feed(self, feed_interval= 20, hp_increase=10):
+        current_time = datetime.now()
+        delta_time = timedelta(seconds=feed_interval)  
+        if (current_time - self.last_feed_time) > delta_time :
+            self.hp += hp_increase
+            self.last_feed_time = current_time 
+            return f"Pokémon sağlığı geri yüklenir. Mevcut HP: {self.hp}"
+        else:
+            self.last_feed_time = current_time 
+            return f"Pokémonunuzu şu zaman besleyebilirsiniz:{current_time + delta_time }"
+
+
 class Wizard(MyPokemon):
+    def feed(self):
+        super().feed(hp_increase=30)
+
+
     async def extrahealth(self):
         extra_health = random.randint(5,15)
         if self.hp <= 20:
             self.hp += extra_health
         return f"Sihirbaz pokemon kendine {extra_health} can bastı!"
+    
+
 
 class Fighter(MyPokemon):
     async def attack(self, enemy):
@@ -104,3 +125,7 @@ class Fighter(MyPokemon):
         result = await super().attack(enemy)
         self.power -= super_power
         return result + f"\nDövüşçü Pokemon süper saldırı kullandı. Eklenen güç {super_power}"
+    
+
+    def feed(self):
+        super().feed(feed_interval=5)

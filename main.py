@@ -73,5 +73,18 @@ async def attack(ctx):
     else:
         await ctx.send("Saldırmak istediğiniz kullanıcıyı etiketleyerek belirtin.")  # Saldırmak için kullanıcıyı etiketleyerek belirtmesini isteriz
         
+
+
+@bot.command()
+async def feed(ctx):
+    author = ctx.author.name
+    if author in Pokemon.pokemons:
+        pokemon = Pokemon.pokemons[author]
+        response = await pokemon.feed()
+        await ctx.send(response)
+    else:
+        await ctx.send("pokemon yok")
+
+
 bot.run(token)
 
